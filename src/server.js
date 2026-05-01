@@ -1,14 +1,21 @@
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import pinoHttp from 'pino-http';
 
-const express = require('express');
-const cors = require('cors');
-const pino = require('pino-http')();
+dotenv.config();
 
 const app = express();
 
+const logger = pinoHttp({
+  transport: {
+    target: 'pino-pretty',
+  },
+});
+
 app.use(cors());
 app.use(express.json());
-app.use(pino);
+app.use(logger);
 
 const PORT = process.env.PORT || 3000;
 
@@ -36,7 +43,7 @@ app.use((req, res) => {
   });
 });
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   res.status(500).json({
     message: err.message,
   });
