@@ -31,11 +31,16 @@ const PORT = process.env.PORT || 3000;
 
 
 const bootstrap = async () => {
-  await connectMongoDB();
+  try {
+    await connectMongoDB();
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
 };
 
 bootstrap();
