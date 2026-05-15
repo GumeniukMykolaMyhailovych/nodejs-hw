@@ -19,6 +19,7 @@ const noteSchema = new mongoose.Schema(
       type: String,
       enum: TAGS,
       default: 'Todo',
+      index: true,
     },
   },
   {
@@ -26,9 +27,4 @@ const noteSchema = new mongoose.Schema(
   },
 );
 
-noteSchema.index({
-  title: 'text',
-  content: 'text',
-});
-
-export const Note = mongoose.model('note', noteSchema);
+export const Note = mongoose.model('Note', noteSchema);
