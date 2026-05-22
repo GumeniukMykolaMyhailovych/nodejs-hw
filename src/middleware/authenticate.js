@@ -8,45 +8,53 @@ export const authenticate = async (
   res,
   next,
 ) => {
-  const { accessToken } = req.cookies;
+  try {
+    const {
+      accessToken,
+      sessionId,
+    } = req.cookies;
 
-  if (!accessToken) {
-    throw createHttpError(
-      401,
-      'Missing access token',
+    if (!accessToken || !sessionId) {
+      throw createHttpError(
+        401,
+        'Missing access token',
+      );
+    }
+
+    const session = await Session.findOne({
+      _id: sessionId,
+      accessToken,
+    });
+
+    if (!session) {
+      throw createHttpError(
+        401,
+        'Session not found',
+      );
+    }
+
+    if (
+      new Date() >
+      new Date(session.accessTokenValidUntil)
+    ) {
+      throw createHttpError(
+        401,
+        'Access token expired',
+      );
+    }
+
+    const user = await User.findById(
+      session.userId,
     );
+
+    if (!user) {
+      throw createHttpError(401);
+    }
+
+    req.user = user;
+
+    next();
+  } catch (error) {
+    next(error);
   }
-
-  const session = await Session.findOne({
-    accessToken,
-  });
-
-  if (!session) {
-    throw createHttpError(
-      401,
-      'Session not found',
-    );
-  }
-
-  if (
-    new Date() >
-    new Date(session.accessTokenValidUntil)
-  ) {
-    throw createHttpError(
-      401,
-      'Access token expired',
-    );
-  }
-
-  const user = await User.findById(
-    session.userId,
-  );
-
-  if (!user) {
-    throw createHttpError(401);
-  }
-
-  req.user = user;
-
-  next();
 };

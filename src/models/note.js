@@ -19,7 +19,6 @@ const noteSchema = new mongoose.Schema(
       type: String,
       enum: TAGS,
       default: 'Todo',
-      index: true,
     },
 
     userId: {
@@ -33,4 +32,9 @@ const noteSchema = new mongoose.Schema(
   },
 );
 
-export const Note = mongoose.model('Note', noteSchema);
+noteSchema.index({ tag: 1, userId: 1 });
+
+export const Note = mongoose.model(
+  'Note',
+  noteSchema,
+);
