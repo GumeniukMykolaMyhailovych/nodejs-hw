@@ -45,8 +45,8 @@ export const setSessionCookies = (
     session.accessToken,
     {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: false,
+      sameSite: 'lax',
       maxAge: FIFTEEN_MINUTES,
     },
   );
@@ -56,8 +56,8 @@ export const setSessionCookies = (
     session.refreshToken,
     {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: false,
+      sameSite: 'lax',
       maxAge: ONE_DAY,
     },
   );
@@ -67,8 +67,8 @@ export const setSessionCookies = (
     session._id.toString(),
     {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: false,
+      sameSite: 'lax',
       maxAge: ONE_DAY,
     },
   );

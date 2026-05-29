@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
     },
+
+    avatar: {
+      type: String,
+      default:
+        'https://ac.goit.global/fullstack/react/default-avatar.jpg',
+    },
   },
   {
     timestamps: true,
@@ -34,9 +40,7 @@ userSchema.methods.toJSON = function () {
 };
 
 userSchema.pre('save', function () {
-  if (!this.username) {
-    this.username = this.email;
-  }
+  this.username = this.email;
 });
 
 export const User = mongoose.model('User', userSchema);
