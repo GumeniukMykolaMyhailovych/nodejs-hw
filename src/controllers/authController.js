@@ -16,7 +16,7 @@ import { fileURLToPath } from 'url';
 import Handlebars from 'handlebars';
 
 import { FIFTEEN_MINUTES } from '../constants/time.js';
-import { sendMail } from '../utils/sendMail.js';
+import { sendEmail } from '../utils/sendMail.js';
 import { readTemplate } from '../utils/readTemplate.js';
 
 const __filename = fileURLToPath(
@@ -257,7 +257,8 @@ export const requestResetEmail = async (
     });
 
 try {
-  await sendMail({
+  await sendEmail({
+    from: process.env.SMTP_FROM,
     to: user.email,
     subject: 'Reset password',
     html,
