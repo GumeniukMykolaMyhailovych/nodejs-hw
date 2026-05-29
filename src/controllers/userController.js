@@ -36,7 +36,7 @@ export const updateUserAvatar = async (
       );
 
     res.status(200).json({
-      avatar: user.avatar,
+      url: user.avatar,
     });
   } catch (error) {
     next(error);
